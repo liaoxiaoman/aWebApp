@@ -1,0 +1,28 @@
+
+
+@@@@如何在linux系统中装Mysql
+
+1. 下载MySQL 5.6
+下载页面：http://dev.mysql.com/downloads/mysql/
+此处选择“Red Hat Enterprise Linux 6 / Oracle Linux 6 (x86, 32-bit), RPM Bundle”下载，下载至/root/Downloads/目录下，下载文件名为“MySQL-5.6.15-1.el6.i686.rpm-bundle.tar”
+
+2. 解压tar包
+cd /root/Downloads/
+tar -xvf MySQL-5.6.15-1.el6.i686.rpm-bundle.tar
+
+3. 以RPM方式安装MySQL
+rpm -ivh MySQL-devel-5.1.61-1.glibc23.i386.rpm  --force --nodeps(强制安装提示/bin/sh is needed by MySql.rpm 错误的问题解决）
+在RHEL系统中，必须先安装“MySQL-shared-compat-5.6.15-1.el6.i686.rpm”这个兼容包，然后才能安装server和client，否则安装时会出错。
+yum install MySQL-shared-compat-5.6.15-1.el6.i686.rpm  # RHEL兼容包
+yum install MySQL-server-5.6.15-1.el6.i686.rpm              # MySQL服务端程序
+yum install MySQL-client-5.6.15-1.el6.i686.rpm                # MySQL客户端程序
+yum install MySQL-devel-5.6.15-1.el6.i686.rpm                # MySQL的库和头文件
+yum install MySQL-shared-5.6.15-1.el6.i686.rpm              # MySQL的共享库
+
+4. 配置MySQL登录密码
+cat /root/.mysql_secret  # 获取MySQL安装时生成的随机密码
+service mysql start      # 启动MySQL服务
+mysql -uroot -p          # 进入MySQL，使用之前获取的随机密码
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('password');  # 在MySQL命令行中设置root账户的密码为password
+quit  # 退出MySQL命令行
+service mysql restart  # 重新启动MySQL服务
